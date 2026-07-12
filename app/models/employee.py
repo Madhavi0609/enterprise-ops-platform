@@ -12,8 +12,19 @@ class Employee(BaseModel):
     phone = Column(String(20))
     designation = Column(String(100))
 
+    # Add these three lines here
+    salary = Column(Integer, nullable=False)
+    hire_date = Column(String(50), nullable=False)
+    status = Column(String(50), default="Active")
+
     organization_id = Column(
         Integer,
         ForeignKey("organizations.id"),
+        nullable=False
+    )
+
+    department_id = Column(
+        Integer,
+        ForeignKey("departments.id"),
         nullable=False
     )
