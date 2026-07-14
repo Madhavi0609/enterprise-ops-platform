@@ -8,6 +8,7 @@ from app.routers.client import router as client_router
 from app.routers.notification import router as notification_router
 from app.routers.project import router as project_router
 from app.routers.document import router as document_router
+from app.routers.attendance import router as attendance_router
 
 app = FastAPI(
     title="Enterprise Operations Pslatform",
@@ -22,3 +23,4 @@ app.include_router(client_router)
 app.include_router(notification_router)
 app.include_router(project_router)
 app.include_router(document_router)
+app.include_router(attendance_router)
