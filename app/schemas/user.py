@@ -1,5 +1,8 @@
+from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel, EmailStr, Field
+
 
 
 class UserBase(BaseModel):
@@ -8,8 +11,10 @@ class UserBase(BaseModel):
     role: str = Field(..., max_length=50)
 
 
+
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8)
+
 
 
 class UserUpdate(BaseModel):
@@ -18,8 +23,11 @@ class UserUpdate(BaseModel):
     role: Optional[str] = Field(None, max_length=50)
 
 
+
 class UserResponse(UserBase):
     id: int
+    created_at: datetime
+    updated_at: datetime
 
     model_config = {
         "from_attributes": True

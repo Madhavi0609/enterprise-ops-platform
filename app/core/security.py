@@ -3,41 +3,60 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-# Password Hashing
+
+# Password hashing
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
 
+
 # JWT Configuration
 SECRET_KEY = "your-super-secret-key-change-this-in-production"
 ALGORITHM = "HS256"
+
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_DAYS = 7
 
 
+
+# -------------------------
+# Password Functions
+# -------------------------
+
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
+
 
 
 def verify_password(
     plain_password: str,
     hashed_password: str
 ) -> bool:
+
     return pwd_context.verify(
         plain_password,
         hashed_password
     )
 
 
+
+# -------------------------
+# JWT Token Functions
+# -------------------------
+
 def create_access_token(data: dict):
+
     to_encode = data.copy()
 
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
-    to_encode.update({"exp": expire})
+    to_encode.update({
+        "exp": expire
+    })
+
 
     return jwt.encode(
         to_encode,
@@ -46,14 +65,19 @@ def create_access_token(data: dict):
     )
 
 
+
 def create_refresh_token(data: dict):
+
     to_encode = data.copy()
 
     expire = datetime.now(timezone.utc) + timedelta(
         days=REFRESH_TOKEN_EXPIRE_DAYS
     )
 
-    to_encode.update({"exp": expire})
+    to_encode.update({
+        "exp": expire
+    })
+
 
     return jwt.encode(
         to_encode,
@@ -62,8 +86,11 @@ def create_refresh_token(data: dict):
     )
 
 
+
 def decode_token(token: str):
+
     try:
+
         payload = jwt.decode(
             token,
             SECRET_KEY,
@@ -72,5 +99,9 @@ def decode_token(token: str):
 
         return payload
 
-    except JWTError:
+
+    except JWTError as e:
+
+        print("JWT ERROR:", e)
+
         return None
