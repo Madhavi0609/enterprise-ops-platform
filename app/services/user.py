@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.repositories.user import UserRepository
 from app.schemas.user import UserCreate, UserUpdate
-
+from app.core.security import hash_password
 
 class UserService:
 
@@ -21,7 +21,8 @@ class UserService:
         if existing_user:
             raise ValueError("Email already exists.")
 
-        return self.repository.create(user)
+        password_hash = hash_password(user.password)
+        return self.repository.create(user, password_hash)
 
     def update_user(self, user_id: int, user: UserUpdate):
         return self.repository.update(user_id, user)
